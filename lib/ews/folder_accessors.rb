@@ -136,7 +136,9 @@ private
     opts[:shape] = opts[:shape] || :default
     folder_id = {:id => opts[:root]}
     folder_id[:act_as] = opts[:act_as] if opts[:act_as]
-    if( opts[:folder_type] )
+    if( opts[:restriction] )
+      restr = opts[:restriction]
+    elsif( opts[:folder_type] )
       restr = { :is_equal_to => 
         [
           {:field_uRI => {:field_uRI=>'folder:FolderClass'}},
