@@ -52,6 +52,7 @@ class Viewpoint::EWS::Connection
       @httpcli.ssl_config.cert_store.set_default_paths
     end
 
+    @http_headers = opts[:headers] if opts[:headers].is_a?(Hash)
     @httpcli.ssl_config.verify_mode = opts[:ssl_verify_mode] if opts[:ssl_verify_mode]
     @httpcli.ssl_config.ssl_version = opts[:ssl_version] if opts[:ssl_version]
     # Up the keep-alive so we don't have to do the NTLM dance as often.
@@ -110,6 +111,7 @@ class Viewpoint::EWS::Connection
   def post(xmldoc)
     headers = {'Content-Type' => 'text/xml'}
     headers['Authorization'] = "Bearer #{@bearer_token}" if @bearer_token
+    headers.merge!(@http_headers) if @http_headers
     check_response( @httpcli.post(@endpoint, xmldoc, headers) )
   end
 
